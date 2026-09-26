@@ -1,0 +1,9 @@
+{
+  "guildName": "YOUR GUILD",
+  "server": "YOUR-SERVER",
+  "timezone": "Asia/Singapore",
+  "threshold": 0.05,
+  "source": "https://mapleidle.gg/characters",
+  "schedule": "Saturday 10:00 SGT",
+  "metrics": ["guild_conquest", "guild_war"]
+}

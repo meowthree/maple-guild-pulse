@@ -1,0 +1,12 @@
+{
+  "name": "maple-guild-pulse",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "update": "node scripts/update-scores.mjs",
+    "build": "cp data/members.json site/members.json && cp data/history.json site/history.json"
+  },
+  "devDependencies": {
+    "playwright": "^1.55.0"
+  }
+}

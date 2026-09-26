@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Maple Guild Pulse</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="maple-bg"><span>🍁</span><span>✦</span><span>🍁</span><span>✦</span><span>🍁</span></div>
+<header class="hero">
+  <div class="brandline"><div class="leaf">🍁</div><div><div class="eyebrow">GUILD WEEKLY TRACKER</div><h1 id="guildName">MAPLE GUILD PULSE</h1></div></div>
+  <div class="hero-right"><div class="mini-card"><span>CHECK DAY</span><strong>EVERY SATURDAY</strong></div><div class="mini-card"><span>IMPROVEMENT TARGET</span><strong>+5%</strong></div></div>
+</header>
+<main class="wrap">
+  <section class="controls">
+    <div class="segmented" role="tablist"><button class="active" data-mode="conquest">Guild Conquest</button><button data-mode="war">Guild War</button></div>
+    <div class="subcontrols"><label>Snapshot <select id="snapshotSelect"></select></label><button id="refreshBtn" class="ghost">↻ Refresh</button></div>
+  </section>
+  <section class="summary" id="summary"></section>
+  <section class="table-card">
+    <div class="table-head"><div><span class="section-kicker">WEEKLY CHECK-IN</span><h2>Guild Progress Board</h2></div><div class="legend"><span><i class="dot up"></i> ≥ 5% improvement</span><span><i class="dot down"></i> under 5% / lower</span><span><i class="dot new"></i> new / no baseline</span></div></div>
+    <div class="table-wrap"><table><thead><tr><th>#</th><th>Mapler</th><th>Previous</th><th>Current</th><th>Change</th><th>Progress</th><th>Weekly status</th></tr></thead><tbody id="tbody"></tbody></table></div>
+  </section>
+  <footer><span>Data source: configurable collector → mapleidle.gg profile/ranking pages</span><span>History is committed as JSON so every Saturday has an auditable snapshot.</span></footer>
+</main>
+<script src="app.js"></script>
+</body></html>

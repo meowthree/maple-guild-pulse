@@ -1,0 +1,8 @@
+{
+  "guild": "My Guild",
+  "world": "luna",
+  "rules": {
+    "targetPercent": 5,
+    "snapshotDay": "Saturday"
+  }
+}
