@@ -3,8 +3,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "update": "node scripts/update-scores.mjs",
-    "build": "cp data/members.json site/members.json && cp data/history.json site/history.json"
+    "build": "rm -rf site && mkdir -p site/data && cp index.html app.js styles.css favicon.svg site/ && cp data/history.json data/config.json site/data/",
+    "collect": "node scripts/collector.mjs",
+    "collect:dry": "node scripts/collector.mjs --dry-run",
+    "serve": "npx serve site -l 3000"
   },
   "devDependencies": {
     "playwright": "^1.55.0"

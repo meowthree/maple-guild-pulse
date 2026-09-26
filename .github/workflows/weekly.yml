@@ -2,8 +2,8 @@ name: Weekly Maple snapshot
 
 on:
   schedule:
-    # 10:00 SGT Saturday = 02:00 UTC Saturday
-    - cron: '0 2 * * 6'
+    # Monday 11:00 AM SGT (UTC+8) = Monday 03:00 UTC
+    - cron: '0 3 * * 1'
   workflow_dispatch:
 
 permissions:
@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   snapshot:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -20,18 +20,20 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
 
       - name: Install dependencies
         run: npm install
 
       - name: Install browser
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install chromium
 
-      - name: Collect Saturday snapshot
+      - name: Collect weekly snapshot
         run: node scripts/collector.mjs
 
-      - name: Commit updated history
+      - name: Validate history JSON
+        run: node -e "const h=JSON.parse(require('fs').readFileSync('data/history.json','utf8')); if(!h.snapshots?.length) throw new Error('no snapshots'); console.log('OK:',h.snapshots.length,'snapshots');"
+
+      - name: Commit and push
         run: |
           git config user.name 'maple-guild-bot'
           git config user.email 'actions@users.noreply.github.com'

@@ -1,0 +1,7 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/$USER/public_html/pulse
+    - /bin/mkdir -p $DEPLOYPATH/data
+    - /bin/cp index.html app.js styles.css favicon.svg $DEPLOYPATH/
+    - /bin/cp data/history.json data/config.json $DEPLOYPATH/data/

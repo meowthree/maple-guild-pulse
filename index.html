@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#140b2a">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <title>Maple Guild Pulse</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,13 +19,18 @@
       <div>
         <div class="eyebrow">GUILD PERFORMANCE TRACKER</div>
         <h1>Maple Guild <span>Pulse</span></h1>
-        <p class="sub">Saturday score check · 5% growth rule · no spreadsheet grinding</p>
+        <div class="guild-tag" id="guildTag">
+          <span class="guild-crest">⚜</span>
+          <span class="guild-name" id="guildName">—</span>
+          <span class="guild-server" id="guildServer"></span>
+        </div>
+        <p class="sub">Monday score check · 5% growth rule · no spreadsheet grinding</p>
       </div>
     </div>
     <div class="hero-actions">
       <button id="metricToggle" class="pill-toggle" type="button" aria-label="Switch metric">
-        <span class="active" data-metric="guild_conquest">⚔ Conquest</span>
-        <span data-metric="guild_war">🏰 Guild War</span>
+        <span class="active" data-metric="conquest">⚔ Conquest</span>
+        <span data-metric="guildWar">🏰 Guild War</span>
       </button>
       <button id="copyReport" class="btn secondary" type="button">Copy weekly report</button>
     </div>
@@ -34,27 +40,63 @@
     <section class="status-row">
       <div class="status-card">
         <span class="status-dot"></span>
-        <div><strong id="sourceStatus">Demo snapshot loaded</strong><small id="lastUpdated">Awaiting first automated run</small></div>
+        <div>
+          <strong id="sourceStatus">Loading…</strong>
+          <small id="lastUpdated">—</small>
+          <small id="collectionStatus" class="hidden"></small>
+        </div>
       </div>
-      <div class="week-chip">SATURDAY <b id="weekLabel">DEMO</b></div>
+      <div class="week-controls">
+        <select id="snapshotSelect" class="week-select" aria-label="Select snapshot"></select>
+        <div class="week-chip">SNAPSHOT <b id="weekLabel">—</b></div>
+      </div>
     </section>
 
     <section class="stats-grid" id="summaryCards">
       <article class="stat"><span>Members</span><strong id="membersCount">—</strong><small>in roster</small></article>
-      <article class="stat"><span>Improved ≥ 5%</span><strong id="improvedCount">—</strong><small>green arrow</small></article>
-      <article class="stat"><span>Needs attention</span><strong id="attentionCount">—</strong><small>red arrow / no gain</small></article>
+      <article class="stat good-stat"><span>Improved ≥ 5%</span><strong id="improvedCount">—</strong><small>green arrow</small></article>
+      <article class="stat bad-stat"><span>Needs attention</span><strong id="attentionCount">—</strong><small>red arrow / stalled</small></article>
+      <article class="stat"><span>No Baseline</span><strong id="noBaseCount">—</strong><small>new / missing</small></article>
       <article class="stat"><span>Biggest jump</span><strong id="biggestJump">—</strong><small id="biggestName">—</small></article>
     </section>
 
     <section class="content-card">
       <div class="card-head">
         <div><span class="tiny-label">WEEKLY BOARD</span><h2>Guild members</h2></div>
-        <div class="tools"><input id="search" type="search" placeholder="Search member..." autocomplete="off"><select id="sort"><option value="rank">Current score</option><option value="growth">Growth %</option><option value="name">Name</option><option value="status">Status</option></select></div>
+        <div class="tools">
+          <input id="search" type="search" placeholder="Search member..." autocomplete="off">
+          <select id="sort">
+            <option value="rank">Current score</option>
+            <option value="cp">CP</option>
+            <option value="level">Level</option>
+            <option value="job">Job</option>
+            <option value="growth">Growth %</option>
+            <option value="name">Name</option>
+            <option value="status">Status</option>
+          </select>
+        </div>
       </div>
-      <div class="legend"><span><i class="good-dot"></i> ≥ 5% improvement</span><span><i class="bad-dot"></i> below 5% / no improvement</span><span><i class="new-dot"></i> missing current</span></div>
+      <div class="legend">
+        <span><i class="good-dot"></i> ≥ 5% improvement</span>
+        <span><i class="bad-dot"></i> below 5% / stalled</span>
+        <span><i class="new-dot"></i> new / missing / no baseline</span>
+      </div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th class="rank-col">#</th><th>Mapler</th><th class="num">Previous</th><th class="num">Current</th><th class="growth-col">Growth</th><th class="trend-col">Pulse</th></tr></thead>
+          <thead>
+            <tr>
+              <th class="rank-col">#</th>
+              <th class="sortable" data-sort="name">Mapler</th>
+              <th class="job-col sortable" data-sort="job">Job</th>
+              <th class="num lvl-col sortable" data-sort="level">Lv</th>
+              <th class="num cp-col sortable" data-sort="cp">CP</th>
+              <th class="num">Previous</th>
+              <th class="num sortable" data-sort="rank">Current</th>
+              <th class="num">Change</th>
+              <th class="growth-col sortable" data-sort="growth">%</th>
+              <th class="trend-col sortable" data-sort="status">Pulse</th>
+            </tr>
+          </thead>
           <tbody id="memberRows"></tbody>
         </table>
       </div>
@@ -62,12 +104,47 @@
     </section>
 
     <section class="bottom-grid">
-      <article class="content-card mini-card"><div class="tiny-label">HOW THE ARROW WORKS</div><h3>The 5% check</h3><p>Green means <b>Current ≥ Previous × 1.05</b>. Anything less is shown in red so the guild can spot stalled progression quickly.</p><div class="formula">▲ +5% = PASS · ▼ / <5% = CHECK</div></article>
-      <article class="content-card mini-card"><div class="tiny-label">AUTOMATION</div><h3>Set it. Forget it. Maple.</h3><p>The GitHub Action collects the Saturday snapshot, appends it to history, and redeploys the dashboard. The website itself stays static and fast.</p><div class="formula">SAT 10:00 SGT · AUTO SNAPSHOT</div></article>
+      <article class="content-card mini-card">
+        <div class="tiny-label">HOW THE ARROW WORKS</div>
+        <h3>The 5% check</h3>
+        <p>Green means <b>Current ≥ Previous × 1.05</b>. Anything less is shown in red so the guild can spot stalled progression quickly.</p>
+        <div class="formula">▲ ≥5% = GREAT · ▼ &lt;5% = CHECK</div>
+      </article>
+      <article class="content-card mini-card">
+        <div class="tiny-label">AUTOMATION</div>
+        <h3>Set it. Forget it. Maple.</h3>
+        <p>The collector runs every <b>Monday at 11:00 AM SGT</b>, appends a new snapshot, and redeploys the dashboard. The website stays static and fast.</p>
+        <div class="formula">MON 11:00 SGT · AUTO SNAPSHOT</div>
+      </article>
     </section>
 
-    <footer><span>Fan-made guild tool · Not affiliated with Nexon.</span><a href="https://mapleidle.gg/characters" target="_blank" rel="noreferrer">Source: mapleidle.gg ↗</a></footer>
+    <footer>
+      <span>Fan-made guild tool · Not affiliated with Nexon.</span>
+      <a href="https://mapleidle.gg" target="_blank" rel="noreferrer">Source: mapleidle.gg ↗</a>
+    </footer>
   </main>
+
+  <!-- Member detail modal -->
+  <div id="memberModal" class="modal-backdrop hidden">
+    <div class="modal">
+      <div class="modal-head">
+        <div>
+          <span class="tiny-label" id="modalMetric">Guild Conquest</span>
+          <h2 id="modalName">—</h2>
+          <p class="modal-member-stats" id="modalStats">—</p>
+        </div>
+        <button id="modalClose" class="modal-close" type="button" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-chart" id="modalChart"></div>
+      <div class="modal-table-wrap">
+        <table class="modal-table">
+          <thead><tr><th>Snapshot</th><th class="num">Score</th><th class="growth-col">Change</th></tr></thead>
+          <tbody id="modalHistory"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
   <script src="app.js"></script>
 </body>
 </html>

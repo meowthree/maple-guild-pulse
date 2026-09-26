@@ -1,9 +1,11 @@
 {
-  "guildName": "YOUR GUILD",
-  "server": "YOUR-SERVER",
+  "guildName": "LUXURIES",
+  "region": "aquila",
+  "worldId": 1,
+  "server": "aquila-7",
   "timezone": "Asia/Singapore",
   "threshold": 0.05,
-  "source": "https://mapleidle.gg/characters",
-  "schedule": "Saturday 10:00 SGT",
-  "metrics": ["guild_conquest", "guild_war"]
+  "source": "mapleidle.gg",
+  "schedule": "Monday 11:00 SGT",
+  "metrics": ["conquest", "guildWar"]
 }

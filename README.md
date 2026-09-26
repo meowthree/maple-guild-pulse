@@ -1,46 +1,37 @@
 # Maple Guild Pulse
 
-A tiny, ad-free weekly tracker for MapleStory Idle RPG guild members.
+A clean, lightweight weekly performance tracker for MapleStory Idle RPG guilds.
 
 ## What it does
-- Tracks Guild Conquest and Guild War separately.
-- Stores Saturday snapshots in `data/history.json`.
-- Compares each member with the previous snapshot.
-- Green `↗` when improvement is at least **5%**; red `↘` otherwise.
-- Highlights new members / missing baselines.
-- Pure HTML/CSS/JS dashboard: no front-end framework and no database required.
 
-## Recommended hosting: Cloudflare Pages
+- Tracks **Guild Conquest** and **Guild War** scores per member.
+- Stores weekly snapshots in `data/history.json` (append-only, never overwritten).
+- Compares each member against the previous week.
+- **Green ▲** when improvement is ≥ **5%**; **red ▼** otherwise.
+- Highlights new members, missing data, and fetch failures clearly.
+- Click any member to see their score history with a line chart.
+- Pure static HTML/CSS/JS dashboard — no framework, no database.
 
-Use **Cloudflare Pages + Git integration** for the website. Connect this GitHub repository to Cloudflare Pages and set:
+## Data source
 
-- Framework preset: **None**
-- Build command: `npm run build`
-- Build output directory: `site`
-- Root directory: `/`
+Scores are collected from [mapleidle.gg](https://mapleidle.gg) via its internal API:
 
-Cloudflare Pages can automatically deploy from GitHub on every push, and static asset requests are free/unlimited on the Pages plans. See the current Cloudflare docs:
-- https://developers.cloudflare.com/pages/configuration/git-integration/github-integration/
-- https://developers.cloudflare.com/pages/framework-guides/deploy-anything/
+| Detail | Value |
+|--------|-------|
+| **Endpoint** | `/api/score-analysis/guild?region=REGION&name=GUILD_NAME` |
+| **Method** | GET (called from within a Playwright browser session) |
+| **Auth** | None — the endpoint is public but sits behind Vercel's JS challenge |
+| **Response** | `{ members: [{ name, job, level, cp, best: { conquest: { score }, guildWar: { score }, ... } }], membersCount }` |
+| **Rate limits** | Unknown; the collector fetches one guild per run with a ~250ms delay |
 
-The weekly GitHub Action updates `data/history.json` and commits it to `main`. That push causes Cloudflare Pages to rebuild, copying the latest data into `site/`.
-
-## First-time setup
-
-1. Put this repository on GitHub.
-2. In Cloudflare: **Workers & Pages → Create application → Pages → Connect to Git**.
-3. Select the repository.
-4. Use the build settings above.
-5. Deploy.
-6. In GitHub, edit `data/config.json` and replace the placeholder guild/server values.
-7. Test the collector manually from **Actions → Weekly Maple snapshot → Run workflow**.
+**Important:** mapleidle.gg uses Vercel bot protection. Plain HTTP requests (curl, Node fetch) get 403/429. Playwright with full Chromium (`channel: 'chromium'`) solves the JS challenge automatically, but **GitHub-hosted Actions runners are blocked** (Azure IP ranges are denied by Vercel). The collector must run from a trusted IP.
 
 ## Data flow
 
-```text
-Maple ranking/profile source
+```
+mapleidle.gg  /api/score-analysis/guild
           ↓
-  GitHub Actions (Sat)
+  Playwright (local or self-hosted runner)
           ↓
    data/history.json
           ↓
@@ -48,13 +39,141 @@ Maple ranking/profile source
           ↓
   Cloudflare Pages build
           ↓
-     Maple dashboard
+     Maple Guild Pulse dashboard
 ```
 
-The collector is intentionally separate from the UI. If the upstream Maplestory ranking source changes, only `scripts/collector.mjs` needs to be adjusted.
+## Schedule
 
-## Collector note
+The GitHub Action is configured to run **every Tuesday at 9:00 PM SGT** (UTC+8):
 
-The exact undocumented endpoint/collection mechanism behind mapleidle.gg has not been hard-coded. The current collector is fail-safe and will not invent or persist scores it could not confidently extract.
+```
+cron: 0 13 * * 2
+```
 
-The sample history in this repository is seeded from the screenshot supplied for UI testing. Replace it with real collector output before using it as an authoritative record.
+A manual `workflow_dispatch` trigger is also available.
+
+Because GitHub-hosted runners are blocked by mapleidle.gg, you have two options:
+
+1. **Self-hosted runner**: Set up a GitHub Actions self-hosted runner on a home/VPS connection. The workflow will work as-is.
+2. **Manual collection**: Run the collector locally and push the results.
+
+## Local development
+
+```bash
+npm install                   # install Playwright
+npm run build                 # build site/ from source files
+npx serve site -l 3000        # serve at http://localhost:3000
+```
+
+Or serve directly from the project root during development (the app fetches from `data/`).
+
+## Running the collector manually
+
+```bash
+# First: set your guild name in data/config.json
+# "guildName": "YourGuildName"
+# "region": "luna"
+
+# Dry run (prints scores, does not write history)
+npm run collect:dry
+
+# Live run (writes to data/history.json)
+npm run collect
+
+# Then commit and push
+git add data/history.json
+git commit -m "weekly guild snapshot $(date +%F)"
+git push
+```
+
+The collector requires Playwright's Chromium browser. On first run:
+
+```bash
+npx playwright install chromium
+```
+
+## Cloudflare Pages
+
+Connect this repository to Cloudflare Pages with these settings:
+
+| Setting | Value |
+|---------|-------|
+| Framework preset | None |
+| Build command | `npm run build` |
+| Build output directory | `site` |
+| Production branch | `main` |
+
+Every push to `main` triggers a rebuild. The build copies `index.html`, `app.js`, `styles.css`, and `data/*.json` into `site/`.
+
+## Configuration
+
+### Guild config (`data/config.json`)
+
+```json
+{
+  "guildName": "YOUR_GUILD_NAME",
+  "region": "luna",
+  "worldId": 1,
+  "server": "luna-1",
+  "timezone": "Asia/Singapore",
+  "threshold": 0.05,
+  "source": "mapleidle.gg",
+  "schedule": "Tuesday 21:00 SGT"
+}
+```
+
+You **must** set `guildName` to your exact guild name (case-sensitive, as it appears on mapleidle.gg) before the collector will work.
+
+### Guild roster (`data/members.json`)
+
+```json
+{
+  "guild": "My Guild",
+  "world": "luna",
+  "members": [
+    { "name": "Toeknee1", "joined": true },
+    { "name": "中年大叔", "joined": true }
+  ]
+}
+```
+
+Add or remove members by editing this file. Set `"joined": false` to exclude a member from tracking without deleting their entry.
+
+### GitHub Secrets
+
+No secrets are required for the collector. The mapleidle.gg API is public (no auth tokens needed). The collector runs entirely through Playwright browser automation.
+
+## Fail-safe behavior
+
+The collector will **never**:
+
+- Write `0` for a missing score
+- Copy a previous score and claim it is current
+- Invent data
+- Write a snapshot if zero scores were retrieved
+
+When a member cannot be looked up:
+
+- Their name is added to the snapshot's `errors` array
+- The dashboard shows them as "FAILED" with a warning icon
+- Previous valid data is preserved in earlier snapshots
+
+## Project structure
+
+```
+maple-guild-pulse/
+├── index.html               # Dashboard source (deployed to site/)
+├── app.js                   # Dashboard logic
+├── styles.css               # Dashboard styles
+├── data/
+│   ├── config.json          # Guild/server configuration
+│   ├── history.json         # All weekly snapshots (source of truth)
+│   └── members.json         # Guild roster
+├── scripts/
+│   └── collector.mjs        # Playwright-based score collector
+├── site/                    # Build output (gitignored, generated by npm run build)
+├── .github/workflows/
+│   └── weekly.yml           # Tuesday 9 PM SGT collection + commit
+├── package.json
+└── .gitignore
+```
