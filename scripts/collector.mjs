@@ -24,9 +24,10 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { chromium } from 'playwright';
 
-const ROOT = path.resolve(new URL('..', import.meta.url).pathname);
-const configPath = path.join(ROOT, 'data/config.json');
-const historyPath = path.join(ROOT, 'data/history.json');
+import { fileURLToPath } from 'node:url';
+const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
+const configPath = path.join(ROOT, 'data', 'config.json');
+const historyPath = path.join(ROOT, 'data', 'history.json');
 
 const config = JSON.parse(await fs.readFile(configPath, 'utf8'));
 const history = JSON.parse(await fs.readFile(historyPath, 'utf8'));
