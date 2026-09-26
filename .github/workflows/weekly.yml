@@ -12,6 +12,9 @@ permissions:
 jobs:
   snapshot:
     runs-on: self-hosted
+    defaults:
+      run:
+        shell: bash
     steps:
       - name: Checkout
         uses: actions/checkout@v4
