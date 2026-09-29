@@ -39,3 +39,17 @@ jobs:
           git config user.email 'actions@users.noreply.github.com'
           git add data/history.json
           $hasChanges = git diff --cached --quiet; if ($LASTEXITCODE -ne 0) { git commit -m "weekly guild snapshot $(Get-Date -Format 'yyyy-MM-dd')" ; git push }
+
+      - name: Deploy to cPanel
+        env:
+          CPANEL_USER: ${{ secrets.CPANEL_USER }}
+          CPANEL_TOKEN: ${{ secrets.CPANEL_TOKEN }}
+          CPANEL_DOMAIN: ${{ secrets.CPANEL_DOMAIN }}
+        run: |
+          $repo = "/home13/mapleidle/repositories/maple-guild-pulse"
+          $headers = @{ Authorization = "cpanel $env:CPANEL_USER`:$env:CPANEL_TOKEN" }
+          $pullUrl = "https://$env:CPANEL_DOMAIN`:2083/execute/VersionControl/update?repository_root=$repo"
+          Invoke-RestMethod -Uri $pullUrl -Headers $headers -Method Get
+          $deployUrl = "https://$env:CPANEL_DOMAIN`:2083/execute/VersionControl/deploy?repository_root=$repo"
+          Invoke-RestMethod -Uri $deployUrl -Headers $headers -Method Get
+          Write-Host "cPanel deploy triggered"
