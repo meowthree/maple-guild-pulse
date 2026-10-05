@@ -443,6 +443,228 @@
         "YewonK": 2684501033.78198
       },
       "errors": []
+    },
+    {
+      "date": "2026-10-05",
+      "timestamp": "2026-10-05T03:05:47.476Z",
+      "source": "mapleidle.gg",
+      "members": {
+        "toeknee1": {
+          "level": 118,
+          "job": "Marksman",
+          "cp": 112526164692504210
+        },
+        "Somteol": {
+          "level": 116,
+          "job": "Paladin",
+          "cp": 32764465662607730
+        },
+        "Philiportiga": {
+          "level": 115,
+          "job": "Buccaneer",
+          "cp": 21493209601121076
+        },
+        "Beebiie": {
+          "level": 116,
+          "job": "Marksman",
+          "cp": 21386791464123692
+        },
+        "Jonnn": {
+          "level": 115,
+          "job": "Marksman",
+          "cp": 10025294978416292
+        },
+        "eclairr": {
+          "level": 113,
+          "job": "Bishop",
+          "cp": 6914757280405112
+        },
+        "Tiggs": {
+          "level": 112,
+          "job": "Hero",
+          "cp": 4787884798337932
+        },
+        "Nyxe": {
+          "level": 112,
+          "job": "Buccaneer",
+          "cp": 4346606081973272.5
+        },
+        "tiggy": {
+          "level": 111,
+          "job": "Bishop",
+          "cp": 3618936698844334.5
+        },
+        "Bestmaximus": {
+          "level": 111,
+          "job": "Marksman",
+          "cp": 3380824119575464
+        },
+        "ReBaLL": {
+          "level": 113,
+          "job": "Marksman",
+          "cp": 2780220023992355.5
+        },
+        "เอวลอย": {
+          "level": 113,
+          "job": "Buccaneer",
+          "cp": 1781318867674002.2
+        },
+        "MissNaughty": {
+          "level": 111,
+          "job": "Bowmaster",
+          "cp": 1378004044951032.8
+        },
+        "KiltZ": {
+          "level": 109,
+          "job": "Dark Knight",
+          "cp": 993438727354873.2
+        },
+        "o夏雨o": {
+          "level": 109,
+          "job": "Marksman",
+          "cp": 721367358463400
+        },
+        "absidy": {
+          "level": 110,
+          "job": "Hero",
+          "cp": 549493389972293.6
+        },
+        "AstralSin": {
+          "level": 110,
+          "job": "Bishop",
+          "cp": 374240785540456.75
+        },
+        "ShootKia": {
+          "level": 109,
+          "job": "Marksman",
+          "cp": 337000173861153.44
+        },
+        "renia": {
+          "level": 107,
+          "job": "Bishop",
+          "cp": 317720554031454.2
+        },
+        "Eevan": {
+          "level": 108,
+          "job": "Marksman",
+          "cp": 218319191880787.25
+        },
+        "KylerX": {
+          "level": 106,
+          "job": "Dark Knight",
+          "cp": 103901043885012.14
+        },
+        "xILuvx": {
+          "level": 105,
+          "job": "Hero",
+          "cp": 71795392943330.95
+        },
+        "Asterix": {
+          "level": 105,
+          "job": "Buccaneer",
+          "cp": 57116140053282.93
+        },
+        "BluePengwin": {
+          "level": 105,
+          "job": "Bowmaster",
+          "cp": 48991386963367.22
+        },
+        "Bingodingo": {
+          "level": 104,
+          "job": "Bowmaster",
+          "cp": 30795881570345.25
+        },
+        "Saitamaa": {
+          "level": 104,
+          "job": "Buccaneer",
+          "cp": 30400053545266.254
+        },
+        "Acedielufcry": {
+          "level": 104,
+          "job": "Ice/Lightning Mage",
+          "cp": 28224401638266.684
+        },
+        "H3RO": {
+          "level": 102,
+          "job": "Hero",
+          "cp": 17087040835484.412
+        },
+        "中年大叔": {
+          "level": 104,
+          "job": "Bishop",
+          "cp": 16274902019614.459
+        },
+        "YewonK": {
+          "level": 102,
+          "job": "Buccaneer",
+          "cp": 13510266116108.357
+        }
+      },
+      "conquest": {
+        "toeknee1": 1355764024260.86,
+        "Somteol": 803130629217.369,
+        "Philiportiga": 384933620212.439,
+        "Beebiie": 844791581396.508,
+        "Jonnn": 531987277399.672,
+        "eclairr": 344509366219.842,
+        "Tiggs": 282733972150.828,
+        "Nyxe": 301472363099.377,
+        "tiggy": 203645766622.243,
+        "Bestmaximus": 152497367631.822,
+        "ReBaLL": 196914091693.176,
+        "เอวลอย": 257828011888.106,
+        "MissNaughty": 148884885759.903,
+        "KiltZ": 100148727671.037,
+        "o夏雨o": 114505189343.96,
+        "absidy": 104257527712.593,
+        "AstralSin": 58620952894.5114,
+        "ShootKia": 107160575141.335,
+        "renia": 33428587238.5761,
+        "Eevan": 55799874542.8899,
+        "KylerX": 24669837136.2532,
+        "xILuvx": 13291311322.8043,
+        "Asterix": 30084618519.4291,
+        "BluePengwin": 18367704159.4375,
+        "Bingodingo": 18759255060.4563,
+        "Saitamaa": 17986385446.5021,
+        "Acedielufcry": 19564847659.2077,
+        "H3RO": 14547015148.661,
+        "中年大叔": 14072643180.5444,
+        "YewonK": 11601279565.2471
+      },
+      "guildWar": {
+        "toeknee1": 804560328477.535,
+        "Somteol": 467377164907.092,
+        "Philiportiga": 253583138203.141,
+        "Beebiie": 295888319208.893,
+        "Jonnn": 236578255685.227,
+        "eclairr": 149336317376.741,
+        "Tiggs": 168309747549.98,
+        "Nyxe": 138356198936.365,
+        "tiggy": 148348239678.981,
+        "Bestmaximus": 125267665413.169,
+        "ReBaLL": 134919968842.743,
+        "เอวลอย": 158578231703.636,
+        "MissNaughty": 49955519157.3645,
+        "KiltZ": 31009061236.6473,
+        "o夏雨o": 66991443325.0824,
+        "absidy": 50248706889.6695,
+        "AstralSin": 25991303422.1911,
+        "ShootKia": 33720392327.1104,
+        "renia": 24545387679.9512,
+        "Eevan": 21030353146.4133,
+        "KylerX": 14646083365.1253,
+        "xILuvx": 10265280702.5382,
+        "Asterix": 13312433561.528,
+        "BluePengwin": 10383003248.9169,
+        "Bingodingo": 11421664352.1577,
+        "Saitamaa": 11466712407.0719,
+        "Acedielufcry": 6270435658.49097,
+        "H3RO": 6245936916.55468,
+        "中年大叔": 6262585715.25313,
+        "YewonK": 6294996490.29682
+      },
+      "errors": []
     }
   ]
 }
